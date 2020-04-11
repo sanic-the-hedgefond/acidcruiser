@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PlatformGenerator platformGenerator = null;
 
-    private GameState gameState;
+    //private GameState gameState;
     private string playerName;
     public int difficulty;
     private int score;
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         highscoreManager = new HighscoreManager();
         playerController.deathEvent += OnDeath;
         playerController.scoreEvent += UpdateScore;
-        gameState = GameState.Menu;
+        //gameState = GameState.Menu;
         cam = Camera.main.GetComponent<Camera>();
     }
 
@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
         {
             startGameEvent();
         }
-        gameState = GameState.Playing;
+        //gameState = GameState.Playing;
         StartCoroutine(SetBGColor(new Color(1f, 0f, 0f), 50));
     }
 
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         highscoreManager.NewHighscore(playerName, playerController.Score, DateTime.Now);
         highscoreManager.SaveHighscores();
-        gameState = GameState.Dead;
+        //gameState = GameState.Dead;
         StartCoroutine(SetBGColor(new Color(1f, 1f, 1f), 50));
     }
 
@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
 
     public void Menu()
     {
-        gameState = GameState.Menu;
+        //gameState = GameState.Menu;
     }
 
     public void Quit()
