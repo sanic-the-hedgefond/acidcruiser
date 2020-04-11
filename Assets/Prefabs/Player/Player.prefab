@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4546280380403105277}
   - component: {fileID: 4546280380403105276}
   - component: {fileID: 4546280380403105275}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube_L
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubeRendered: {fileID: 4563550673843567235}
+  isLeft: 0
 --- !u!1 &4546280380516966902
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,9 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4546280380516966900}
   - component: {fileID: 4546280380516966903}
-  - component: {fileID: 1648735510646546419}
-  - component: {fileID: 8263060830044281842}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -161,32 +160,6 @@ MonoBehaviour:
   go_cube_L: {fileID: 4546280380403105278}
   go_cube_R: {fileID: 4546280381169739586}
   joystick: {fileID: 0}
---- !u!65 &1648735510646546419
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4546280380516966902}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.75, z: 3}
-  m_Center: {x: 2, y: 0, z: 0}
---- !u!65 &8263060830044281842
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4546280380516966902}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.75, z: 3}
-  m_Center: {x: -2, y: 0, z: 0}
 --- !u!1 &4546280381169739586
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,7 +173,7 @@ GameObject:
   - component: {fileID: 4546280381169739585}
   - component: {fileID: 4546280381169739584}
   - component: {fileID: 4546280381169739599}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube_R
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -295,6 +268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubeRendered: {fileID: 187536725096157229}
+  isLeft: 0
 --- !u!1001 &5576023872134951888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -306,6 +280,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Playercube_rendered_R
+      objectReference: {fileID: 0}
+    - target: {fileID: 5762434352327812093, guid: b93731e1eb3707c4e8b9226347920d72,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 9110454546230628060, guid: b93731e1eb3707c4e8b9226347920d72,
         type: 3}
@@ -387,6 +366,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Playercube_rendered_L
+      objectReference: {fileID: 0}
+    - target: {fileID: 5762434352327812093, guid: b93731e1eb3707c4e8b9226347920d72,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 9110454546230628060, guid: b93731e1eb3707c4e8b9226347920d72,
         type: 3}

@@ -21,6 +21,8 @@ public class PlayerCube : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        FindObjectOfType<PlayerController>().OnCollisionEnterChild(collision);
+        /*
         if (collision.gameObject.tag == "Platform")
         {
             FindObjectOfType<PlayerController>().DecreaseHealth(20);
@@ -28,6 +30,7 @@ public class PlayerCube : MonoBehaviour
             collision.gameObject.AddComponent<TriangleExplosion>();
             StartCoroutine(collision.gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
         }
+        */
     }
 
     public void RotateY(float y)

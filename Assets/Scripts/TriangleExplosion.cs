@@ -7,6 +7,7 @@ public class TriangleExplosion : MonoBehaviour
 
     public IEnumerator SplitMesh(bool destroy)
     {
+        Vector3 scale = transform.localScale;
 
         if (GetComponent<MeshFilter>() == null || GetComponent<SkinnedMeshRenderer>() == null)
         {
@@ -22,7 +23,6 @@ public class TriangleExplosion : MonoBehaviour
         if (GetComponent<MeshFilter>())
         {
             M = GetComponent<MeshFilter>().mesh;
-            Debug.Log("Meshfilter bla");
         }
         else if (GetComponent<SkinnedMeshRenderer>())
         {
@@ -56,6 +56,13 @@ public class TriangleExplosion : MonoBehaviour
                 {
                     int index = indices[i + n];
                     newVerts[n] = verts[index];
+
+                    // Consider local scale
+                    // Debug.Log(newVerts[n]);
+                    newVerts[n].x *= scale.x;
+                    newVerts[n].y *= scale.y;
+                    newVerts[n].z *= scale.z;
+
                     newUvs[n] = uvs[index];
                     newNormals[n] = normals[index];
                 }
@@ -75,7 +82,7 @@ public class TriangleExplosion : MonoBehaviour
                 GO.AddComponent<MeshFilter>().mesh = mesh;
                 GO.AddComponent<BoxCollider>();
                 Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-0.5f, 0.5f), transform.position.y + Random.Range(0f, 0.5f), transform.position.z + Random.Range(-0.5f, 0.5f));
-                GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(300, 500), explosionPos, 5);
+                GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(300, 500), explosionPos, 5f, 0.2f);
                 Destroy(GO, 5 + Random.Range(0.0f, 5.0f));
             }
         }

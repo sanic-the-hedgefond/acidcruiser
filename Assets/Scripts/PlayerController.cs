@@ -103,6 +103,21 @@ public class PlayerController : MonoBehaviour
         */
     }
 
+    public void OnCollisionEnterChild(Collision collision)
+    {
+        if (collision.gameObject.tag == "Platform")
+        {
+            DecreaseHealth(20);
+
+            if (health > 0)
+            {
+                Debug.Log(health);
+                collision.gameObject.AddComponent<TriangleExplosion>();
+                StartCoroutine(collision.gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
+            }
+        }
+    }
+
     public void SetHealth(int h)
     {
         health = h;

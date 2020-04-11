@@ -44,6 +44,20 @@ public class PlatformController : MonoBehaviour
         }
     }
 
+    /*
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            FindObjectOfType<PlayerController>().DecreaseHealth(20);
+            Debug.Log("-20HP Time: " + Time.time);
+            Destroy(gameObject);
+            //gameObject.AddComponent<TriangleExplosion>();
+            //StartCoroutine(gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
+        }
+    }
+    */
+
     public void Kill()
     {
         if (isLast)
