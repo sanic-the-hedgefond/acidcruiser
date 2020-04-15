@@ -40,9 +40,8 @@ public class PlatformController : MonoBehaviour
         transform.Rotate(new Vector3(x_rot, y_rot, z_rot));
 
         // Destroy if platform is out of frame
-        if (pos.y < -5f)
+        if (pos.y < -6f)
         {
-            FindObjectOfType<PlayerController>().IncreaseScore(20 * ((int)transform.localScale.x+1) * ((int)transform.localScale.y+1));
             Kill();
         }
     }
@@ -118,6 +117,11 @@ public class PlatformController : MonoBehaviour
         if (isLast)
         {
             gameManager.NextStage();
+        }
+        else
+        {
+            FindObjectOfType<PlayerController>().IncreaseScore(20 * ((int)transform.localScale.x + 1) *
+                                                                    ((int)transform.localScale.y + 1));
         }
         Destroy(gameObject);
     }
