@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
     public Action startGameEvent;
     public HighscoreManager highscoreManager;
 
+    public Color color_BGmenu;
+    public Color color_BGgame;
+
     [SerializeField]
     private PlayerController playerController = null;
     [SerializeField]
@@ -58,15 +61,15 @@ public class GameManager : MonoBehaviour
             startGameEvent();
         }
         //gameState = GameState.Playing;
-        StartCoroutine(SetBGColor(new Color(1f, 0f, 0f), 50));
+        StartCoroutine(SetBGColor(color_BGgame, 50));
     }
 
     void OnDeath()
     {
+        StartCoroutine(SetBGColor(color_BGmenu, 50));
         highscoreManager.NewHighscore(playerName, playerController.Score, DateTime.Now);
         highscoreManager.SaveHighscores();
         //gameState = GameState.Dead;
-        StartCoroutine(SetBGColor(new Color(1f, 1f, 1f), 50));
     }
 
     void UpdateScore(int s)

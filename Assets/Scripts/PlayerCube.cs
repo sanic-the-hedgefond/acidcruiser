@@ -21,7 +21,7 @@ public class PlayerCube : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        FindObjectOfType<PlayerController>().OnCollisionEnterChild(collision);
+        //FindObjectOfType<PlayerController>().OnCollisionEnterChild(collision);
         /*
         if (collision.gameObject.tag == "Platform")
         {

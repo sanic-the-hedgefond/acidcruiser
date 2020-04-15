@@ -91,9 +91,11 @@ public class PlayerController : MonoBehaviour
         // Change rotation of player(cubes)
         rotation_interp = Mathf.Lerp(rotation_interp, position_delta.x, rotation_smoothness);
         transform.rotation = Quaternion.Euler(Vector3.back * rotation_interp * rotation_speed);
-        SetBGHue(Mathf.Abs(rotation_interp) % 1000 * 0.001f);
+
         go_cube_L.GetComponent<PlayerCube>().RotateY(rotation_interp);
         go_cube_R.GetComponent<PlayerCube>().RotateY(-rotation_interp);
+
+        //SetBGHue(Mathf.Abs(rotation_interp) % 1000 * 0.001f);
 
         /*
         if (joystick.Direction.x != 0 && !isDead)
@@ -103,22 +105,18 @@ public class PlayerController : MonoBehaviour
         */
     }
 
+    /*
     public void OnCollisionEnterChild(Collision collision)
     {
         if (collision.gameObject.tag == "Platform")
         {
-            DecreaseHealth(20);
-
-            /*
-            if (health > 0)
+            if (!collision.gameObject.GetComponent<PlatformController>().isDestroyed)
             {
-                Debug.Log(health);
-                collision.gameObject.AddComponent<TriangleExplosion>();
-                StartCoroutine(collision.gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
+                DecreaseHealth(20);
             }
-            */
         }
     }
+    */
 
     public void SetHealth(int h)
     {

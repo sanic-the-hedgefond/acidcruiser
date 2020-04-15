@@ -11,6 +11,7 @@ public class PlatformController : MonoBehaviour
     public float y_rot;
     public float x_rot;
 
+    public bool isDestroyed;
     public bool isLast;
     public GameObject cube_shattered;
 
@@ -20,6 +21,7 @@ public class PlatformController : MonoBehaviour
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        isDestroyed = false;
     }
 
     // Update is called once per frame
@@ -101,7 +103,13 @@ public class PlatformController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            StartCoroutine(DeathAnimation());
+            if(!isDestroyed)
+            {
+                StartCoroutine(DeathAnimation());
+                FindObjectOfType<PlayerController>().DecreaseHealth(20);
+            }
+
+            isDestroyed = true;
         }
     }
 
