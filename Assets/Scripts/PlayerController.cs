@@ -109,12 +109,14 @@ public class PlayerController : MonoBehaviour
         {
             DecreaseHealth(20);
 
+            /*
             if (health > 0)
             {
                 Debug.Log(health);
                 collision.gameObject.AddComponent<TriangleExplosion>();
                 StartCoroutine(collision.gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
             }
+            */
         }
     }
 
