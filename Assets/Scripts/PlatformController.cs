@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,15 +14,17 @@ public class PlatformController : MonoBehaviour
 
     public bool isDestroyed;
     public bool isLast;
-    public GameObject cube_shattered;
 
     private GameManager gameManager;
+    private int score;
 
     // Start is called before the first frame update
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         isDestroyed = false;
+
+        score = 20 * ((int)transform.localScale.x + 1) * ((int)transform.localScale.y + 1);
     }
 
     // Update is called once per frame
@@ -46,58 +49,6 @@ public class PlatformController : MonoBehaviour
         }
     }
 
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            FindObjectOfType<PlayerController>().DecreaseHealth(20);
-            Debug.Log("-20HP Time: " + Time.time);
-            Destroy(gameObject);
-            //gameObject.AddComponent<TriangleExplosion>();
-            //StartCoroutine(gameObject.GetComponent<TriangleExplosion>().SplitMesh(true));
-        }
-    }
-    */
-
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            Debug.Log("Pos: " + transform.position + " Scale: " + transform.localScale);
-            GameObject tmp = Instantiate(cube_shattered, transform.position, transform.rotation);
-            tmp.transform.localScale = transform.localScale/2f;
-            //tmp.transform.position = transform.position;
-            //tmp.transform.rotation = transform.rotation;
-            Destroy(gameObject);
-        }
-    }
-    */
-
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            Debug.Log(transform.localScale);
-            for (int i = 0; i < (int)(transform.localScale[0]*2); i++)
-            {
-                for (int j = 0; j < (int)(transform.localScale[1]*2); j++)
-                {
-                    for (int k = 0; k < (int)(transform.localScale[2]*2); k++)
-                    {
-                        //Debug.Log("i" + i + " j" + j + " k" + k);
-                        Vector3 relative_pos = new Vector3(i - transform.localScale[0] / 2f, j - transform.localScale[1] / 2f, k)/2f;
-                        Instantiate(cube_shattered, transform.position+relative_pos, transform.rotation);
-                    }
-                }
-            }
-        }
-        Destroy(gameObject);
-    }
-    */
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -106,6 +57,17 @@ public class PlatformController : MonoBehaviour
             {
                 StartCoroutine(DeathAnimation());
                 FindObjectOfType<PlayerController>().DecreaseHealth(20);
+
+                GameObject gameUI = GameObject.Find("GameUI");
+                if (gameUI != null)
+                {
+                    gameUI.GetComponent<GameUI>().DisplayText("-" + score, 200f, 40, new Vector2(0f, 250f), new Color(255f/255f, 68f/255f, 195f/255f));
+                }
+
+                if(FindObjectOfType<PlayerController>() != null)
+                {
+                    FindObjectOfType<PlayerController>().DecreaseScore(score);
+                }
             }
 
             isDestroyed = true;
@@ -120,8 +82,13 @@ public class PlatformController : MonoBehaviour
         }
         else
         {
-            FindObjectOfType<PlayerController>().IncreaseScore(20 * ((int)transform.localScale.x + 1) *
-                                                                    ((int)transform.localScale.y + 1));
+            GameObject gameUI = GameObject.Find("GameUI");
+            if (gameUI != null)
+            {
+                gameUI.GetComponent<GameUI>().DisplayText("+" + score, 200f, 40, new Vector2(0f, 250f), new Color(0f, 0f, 0f));
+            }
+
+            FindObjectOfType<PlayerController>().IncreaseScore(score);
         }
         Destroy(gameObject);
     }

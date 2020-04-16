@@ -13,13 +13,14 @@ public class PlayerController : MonoBehaviour
     public float rotation_speed;
     public float rotation_smoothness;
     public float translation_speed;
+    public float inner_roation;
 
     public GameObject go_cube_L, go_cube_R;
-    public FixedJoystick joystick;
 
     private Vector2 position_start;
     private Vector2 position_delta;
     private float rotation_interp = 0f;
+    private float const_inner_rotation = 0f;
 
     private bool isDead;
     private const int start_health = 100;
@@ -37,9 +38,6 @@ public class PlayerController : MonoBehaviour
 
         go_cube_L.SetActive(false);
         go_cube_R.SetActive(false);
-
-        joystick.AxisOptions = AxisOptions.Horizontal;
-        joystick.SnapX = true;
     }
 
     // Update is called once per frame
@@ -60,63 +58,24 @@ public class PlayerController : MonoBehaviour
             {
                 // Sliding distance
                 position_delta = touch.position - position_start;
-
-                /*
-                // Change distance from between cubes
-                Vector3 pos_cube_L = go_cube_L.transform.TransformPoint(new Vector3(position_delta.y * translation_speed, 0.0f, 0.0f));
-                Vector3 pos_cube_R = go_cube_R.transform.TransformPoint(new Vector3(position_delta.y * -translation_speed, 0.0f, 0.0f));
-
-                if ((pos_cube_L - pos_cube_R).magnitude > 0.495f &&
-                    (pos_cube_L - pos_cube_R).magnitude < 4.5f)
-                {  
-                    go_cube_L.transform.position = pos_cube_L;
-                    go_cube_R.transform.position = pos_cube_R;
-                }
-                */
             }
-
-            //Debug.Log("Delta: " + position_delta.x + " || Interp: " + rotation_interp + " || Touch:" + touch.position.x);
-            // Change background color depending on player rotation
-            /*
-            Color bg_col = Camera.main.GetComponent<Camera>().backgroundColor;
-
-            float H, S, V;
-            Color.RGBToHSV(bg_col, out H, out S, out V);
-            H = (Mathf.Abs(position_delta.x) % 1000) * 0.001f;
-            Camera.main.GetComponent<Camera>().backgroundColor = Color.HSVToRGB(H, S, V);
-            Debug.Log("H:" + H + "Delta: " + position_delta.x);
-            */
         }
+    }
 
+    private void FixedUpdate()
+    {
         // Change rotation of player(cubes)
         rotation_interp = Mathf.Lerp(rotation_interp, position_delta.x, rotation_smoothness);
+
         transform.rotation = Quaternion.Euler(Vector3.back * rotation_interp * rotation_speed);
 
-        go_cube_L.GetComponent<PlayerCube>().RotateY(rotation_interp);
-        go_cube_R.GetComponent<PlayerCube>().RotateY(-rotation_interp);
+        const_inner_rotation += 0.5f;
+
+        go_cube_L.GetComponent<PlayerCube>().RotateY(rotation_interp * inner_roation + const_inner_rotation);
+        go_cube_R.GetComponent<PlayerCube>().RotateY(-rotation_interp * inner_roation - const_inner_rotation);
 
         //SetBGHue(Mathf.Abs(rotation_interp) % 1000 * 0.001f);
-
-        /*
-        if (joystick.Direction.x != 0 && !isDead)
-        {
-            transform.Rotate(Vector3.back, joystick.Direction.x * rotation_speed);
-        }
-        */
     }
-
-    /*
-    public void OnCollisionEnterChild(Collision collision)
-    {
-        if (collision.gameObject.tag == "Platform")
-        {
-            if (!collision.gameObject.GetComponent<PlatformController>().isDestroyed)
-            {
-                DecreaseHealth(20);
-            }
-        }
-    }
-    */
 
     public void SetHealth(int h)
     {
@@ -148,6 +107,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void DecreaseScore(int s)
+    {
+        score -= s;
+        if(score < 0) { score = 0; }
+
+        if (scoreEvent != null && !isDead)
+        {
+            scoreEvent(score);
+        }
+    }
+
     public void PlayerDead()
     {
         isDead = true;
@@ -168,7 +138,6 @@ public class PlayerController : MonoBehaviour
         score = 0;
         health = start_health;
         transform.rotation = Quaternion.identity;
-        joystick.Reset();
 
         if (restartEvent != null)
         {
@@ -193,6 +162,5 @@ public class PlayerController : MonoBehaviour
         Color.RGBToHSV(bg_col, out H, out S, out V);
         H = h;
         Camera.main.GetComponent<Camera>().backgroundColor = Color.HSVToRGB(H, S, V);
-        //Debug.Log("H:" + H);
     }
 }

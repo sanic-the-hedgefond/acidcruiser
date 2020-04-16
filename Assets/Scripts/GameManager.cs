@@ -48,12 +48,6 @@ public class GameManager : MonoBehaviour
         cam = Camera.main.GetComponent<Camera>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void StartGame()
     {
         if (startGameEvent != null)

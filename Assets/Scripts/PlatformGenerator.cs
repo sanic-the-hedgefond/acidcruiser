@@ -22,22 +22,6 @@ public class PlatformGenerator : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        /*
-        timer -= Time.deltaTime;
-        if (timer <= 0)
-        {
-            if (current_stage <= stages.Length) { current_stage++; }
-            else { current_stage = 0; }
-            GenerateStage(current_stage);
-
-            timer = time_interval;
-        }
-        */
-    }
-
     void Deactivate()
     {
         foreach (GameObject stage in level)

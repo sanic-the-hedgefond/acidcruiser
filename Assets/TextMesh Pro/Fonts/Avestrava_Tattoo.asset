@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: Avestrava Tattoo Personal Use Only SDF
+  m_Name: Avestrava_Tattoo
   m_EditorClassIdentifier: 
-  hashCode: -1917974438
+  hashCode: 1926277403
   material: {fileID: 2678517362888047282}
   materialHashCode: -700527
   m_Version: 1.1.0
