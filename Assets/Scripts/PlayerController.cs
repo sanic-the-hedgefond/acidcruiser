@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public float translation_speed;
     public float inner_roation;
 
+    private float sensitivity;
+
     public GameObject go_cube_L, go_cube_R;
 
     private Vector2 position_start;
@@ -51,13 +53,13 @@ public class PlayerController : MonoBehaviour
             if (touch.phase == TouchPhase.Began)
             {
                 //Debug.Log("Touch Begin");
-                position_start = touch.position - position_delta;
+                position_start = touch.position * sensitivity - position_delta;
             }
 
             if (touch.phase == TouchPhase.Moved)
             {
                 // Sliding distance
-                position_delta = touch.position - position_start;
+                position_delta = touch.position * sensitivity - position_start;
             }
         }
     }
@@ -138,6 +140,7 @@ public class PlayerController : MonoBehaviour
         score = 0;
         health = start_health;
         transform.rotation = Quaternion.identity;
+        sensitivity = FindObjectOfType<GameManager>().GetSensitivity();
 
         if (restartEvent != null)
         {

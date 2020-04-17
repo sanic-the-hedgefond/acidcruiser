@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 public class GameUI : MonoBehaviour
 {
+    public TMP_FontAsset acidFont;
+
     List<GameObject> texts = new List<GameObject>();
 
     // Start is called before the first frame update
@@ -51,7 +52,7 @@ public class GameUI : MonoBehaviour
         text.fontSize = size;
         text.color = color;
         text.alignment = TextAlignmentOptions.Center;
-        text.font = (TMP_FontAsset)AssetDatabase.LoadAssetAtPath("Assets/TextMesh Pro/Fonts/Avestrava_Tattoo.asset", typeof(TMP_FontAsset));
+        text.font = acidFont;
 
         rect.anchorMin = new Vector2(0.5f, 0.5f);
         rect.anchorMax = new Vector2(0.5f, 0.5f);
@@ -65,22 +66,22 @@ public class GameUI : MonoBehaviour
 
         textGO.transform.localScale = Vector3.zero;
 
-        int blendtime = 40;
-        float y_speed = 1.5f;
+        int blendtime = 20;
+        float y_speed = 2.5f;
 
         for (int i = 0; i < blendtime; i++)
         {
             pos.y += y_speed;
             textGO.transform.position = pos;
             textGO.transform.localScale = Vector3.one * Mathf.SmoothStep(0f, 1f, i / (float)blendtime);
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
 
         for (int i = 0; i < duration; i++)
         {
             pos.y += y_speed;
             textGO.transform.position = pos;
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
 
         for (int i = 0; i < blendtime; i++)
@@ -88,7 +89,7 @@ public class GameUI : MonoBehaviour
             pos.y += y_speed;
             textGO.transform.position = pos;
             text.color = new Color(color.r, color.g, color.b, Mathf.SmoothStep(1f, 0f, i / (float)blendtime));
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
 
         Destroy(textGO);

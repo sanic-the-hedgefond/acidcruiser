@@ -8,8 +8,8 @@ public class MenuUI : MonoBehaviour
 {
     private GameManager gameManager;
 
-    public TextMeshProUGUI playerNamePro;
-    public Slider difficulty;
+    public TextMeshProUGUI playerNameText;
+    public Slider sliderSensitivity;
 
     // Start is called before the first frame update
     void Start()
@@ -20,19 +20,24 @@ public class MenuUI : MonoBehaviour
 
     public void SetPlayerName()
     {
-        playerNamePro.text = gameManager.GetPlayerName();
+        playerNameText.text = gameManager.GetPlayerName();
     }
 
     public void ChangePlayerName()
     {
-        if (playerNamePro.text != "")
+        if (playerNameText.text != "")
         {
-            gameManager.SetPlayerName(playerNamePro.text);
+            gameManager.SetPlayerName(playerNameText.text);
         }
     }
 
-    public void changeDifficulty()
+    public void ChangeSensitivity()
     {
-        gameManager.SetDifficulty((int)difficulty.value);
+        gameManager.SetSensitivity(sliderSensitivity.value);
+    }
+
+    public void SetSlider()
+    {
+        sliderSensitivity.value = gameManager.GetSensitivity();
     }
 }

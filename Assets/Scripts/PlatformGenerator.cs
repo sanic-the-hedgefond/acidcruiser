@@ -40,11 +40,6 @@ public class PlatformGenerator : MonoBehaviour
         GenerateStage(current_stage);
     }
 
-    public void SetDifficulty(int d)
-    {
-
-    }
-
     private void GenerateStage(int n)
     {
         level.Add(Instantiate(stages[n], transform));

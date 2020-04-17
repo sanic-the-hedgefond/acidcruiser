@@ -34,12 +34,7 @@ public class PlatformController : MonoBehaviour
         Vector3 pos = transform.position;
         pos.x += x_speed;
         pos.y -= y_speed;
-
-        // Additional y speed relative to difficulty
-        pos.y -= gameManager.GetDifficultyFactor() / 200f;
-
         transform.position = pos;
-
         transform.Rotate(new Vector3(x_rot, y_rot, z_rot));
 
         // Destroy if platform is out of frame
@@ -56,12 +51,12 @@ public class PlatformController : MonoBehaviour
             if(!isDestroyed)
             {
                 StartCoroutine(DeathAnimation());
-                FindObjectOfType<PlayerController>().DecreaseHealth(20);
+                FindObjectOfType<PlayerController>().DecreaseHealth(50);
 
                 GameObject gameUI = GameObject.Find("GameUI");
                 if (gameUI != null)
                 {
-                    gameUI.GetComponent<GameUI>().DisplayText("-" + score, 200f, 40, new Vector2(0f, 250f), new Color(255f/255f, 68f/255f, 195f/255f));
+                    gameUI.GetComponent<GameUI>().DisplayText("-" + score, 200f, 20, new Vector2(0f, 250f), new Color(255f/255f, 68f/255f, 195f/255f));
                 }
 
                 if(FindObjectOfType<PlayerController>() != null)
@@ -85,7 +80,7 @@ public class PlatformController : MonoBehaviour
             GameObject gameUI = GameObject.Find("GameUI");
             if (gameUI != null)
             {
-                gameUI.GetComponent<GameUI>().DisplayText("+" + score, 200f, 40, new Vector2(0f, 250f), new Color(0f, 0f, 0f));
+                gameUI.GetComponent<GameUI>().DisplayText("+" + score, 200f, 20, new Vector2(0f, 250f), new Color(0f, 0f, 0f));
             }
 
             FindObjectOfType<PlayerController>().IncreaseScore(score);
@@ -95,8 +90,8 @@ public class PlatformController : MonoBehaviour
 
     public IEnumerator DeathAnimation()
     {
-        int frames_part1 = 20;
-        int frames_part2 = 10;
+        int frames_part1 = 10;
+        int frames_part2 = 7;
 
         float scale_factor = 1.25f;
 
@@ -107,7 +102,7 @@ public class PlatformController : MonoBehaviour
             transform.localScale = new Vector3(Mathf.SmoothStep(scale.x, scale.x * scale_factor, i / (float)frames_part1),
                                                 Mathf.SmoothStep(scale.y, scale.y * scale_factor, i / (float)frames_part1),
                                                 Mathf.SmoothStep(scale.z, scale.z * scale_factor, i / (float)frames_part1));
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
 
         for (int i = 0; i < frames_part2; i++)
@@ -115,7 +110,7 @@ public class PlatformController : MonoBehaviour
             transform.localScale = new Vector3( Mathf.SmoothStep(scale.x, 0f, i/(float)frames_part2),
                                                 Mathf.SmoothStep(scale.y, 0f, i/(float)frames_part2),
                                                 Mathf.SmoothStep(scale.z, 0f, i/(float)frames_part2));
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
         Destroy(gameObject);
     }

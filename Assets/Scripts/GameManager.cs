@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 
     //private GameState gameState;
     private string playerName;
-    public int difficulty;
+    private float sensitivity;
     private int score;
     private Camera cam;
 
@@ -39,6 +39,15 @@ public class GameManager : MonoBehaviour
         else
         {
             playerName = "noname";
+        }
+
+        if (PlayerPrefs.HasKey("sensitivity"))
+        {
+            sensitivity = PlayerPrefs.GetFloat("sensitivity");
+        }
+        else
+        {
+            sensitivity = 1f;
         }
 
         highscoreManager = new HighscoreManager();
@@ -97,17 +106,6 @@ public class GameManager : MonoBehaviour
         return playerName;
     }
 
-    public void SetDifficulty(int d)
-    {
-        difficulty = d;
-        platformGenerator.SetDifficulty(d);
-    }
-
-    public float GetDifficultyFactor()
-    {
-        return ((float)difficulty - 5f) / 5f;
-    }
-
     public IEnumerator SetBGColor(Color col, int steps)
     {
         Color current_col = cam.backgroundColor;
@@ -121,5 +119,16 @@ public class GameManager : MonoBehaviour
     public void NextStage()
     {
         platformGenerator.NextStage();
+    }
+
+    public void SetSensitivity(float s)
+    {
+        sensitivity = s;
+        PlayerPrefs.SetFloat("sensitivity", sensitivity);
+    }
+
+    public float GetSensitivity()
+    {
+        return sensitivity;
     }
 }
