@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     private PlayerController playerController = null;
     [SerializeField]
     private PlatformGenerator platformGenerator = null;
+    [SerializeField]
+    public Background background = null;
 
     //private GameState gameState;
     private string playerName;
@@ -65,11 +67,13 @@ public class GameManager : MonoBehaviour
         }
         //gameState = GameState.Playing;
         StartCoroutine(SetBGColor(color_BGgame, 50));
+        StartCoroutine(background.SetGridColor(new Color(191/255f, 82/255f, 167/255f, 1f) * 2f));
     }
 
     void OnDeath()
     {
         StartCoroutine(SetBGColor(color_BGmenu, 50));
+        StartCoroutine(background.SetGridColor(new Color(255 / 255f, 255 / 255f, 255 / 255f, 1f) * 1.5f));
         highscoreManager.NewHighscore(playerName, playerController.Score, DateTime.Now);
         highscoreManager.SaveHighscores();
         //gameState = GameState.Dead;
