@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public Action<int> scoreEvent;
     public Action deathEvent;
     public Action restartEvent;
+    public Action pauseEvent;
 
     public float rotation_speed;
     public float rotation_smoothness;
@@ -19,10 +20,17 @@ public class PlayerController : MonoBehaviour
 
     public GameObject go_cube_L, go_cube_R;
 
+    public AudioSource snd_hit;
+    public AudioSource snd_dead;
+    public AudioSource audioNearPlatform;
+
     private Vector2 position_start;
     private Vector2 position_delta;
     private float rotation_interp = 0f;
     private float const_inner_rotation = 0f;
+
+    private float nearPlatformRadius = 2.2f;
+    private float volume = 0.1f;
 
     private bool isDead;
     private const int start_health = 100;
@@ -40,6 +48,9 @@ public class PlayerController : MonoBehaviour
 
         go_cube_L.SetActive(false);
         go_cube_R.SetActive(false);
+
+        audioNearPlatform.volume = volume;
+        audioNearPlatform.Play();
     }
 
     // Update is called once per frame
@@ -62,6 +73,15 @@ public class PlayerController : MonoBehaviour
                 position_delta = touch.position * sensitivity - position_start;
             }
         }
+
+        if (IsDoubleTap())
+        {
+            if (pauseEvent != null)
+            {
+                pauseEvent();
+                FindObjectOfType<GameManager>().Pause();
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -77,6 +97,44 @@ public class PlayerController : MonoBehaviour
         go_cube_R.GetComponent<PlayerCube>().RotateY(-rotation_interp * inner_roation - const_inner_rotation);
 
         //SetBGHue(Mathf.Abs(rotation_interp) % 1000 * 0.001f);
+
+        // Check for platforms in radius and play sound
+        Collider[] nearPlatforms = Physics.OverlapSphere(transform.position, 15);
+
+        //Debug.Log(string.Format("nearPlatforms: {0}", nearPlatforms.Length));
+
+        if (nearPlatforms.Length != 0)
+        {
+            float delta = 0f;
+            float minDistance = nearPlatformRadius;
+
+            foreach (var platform in nearPlatforms)
+            {
+                if (platform.gameObject.tag == "Platform")
+                {
+                    //vol = 1f;
+                    Vector3 closestL = platform.ClosestPointOnBounds(go_cube_L.transform.position + new Vector3(0.25f, 0f, 2.2f));
+                    Vector3 closestR = platform.ClosestPointOnBounds(go_cube_R.transform.position + new Vector3(-0.25f, 0f, 2.2f));
+
+                    float distL = Vector3.Distance(go_cube_L.transform.position, closestL);
+                    float distR = Vector3.Distance(go_cube_R.transform.position, closestR);
+
+                    //Debug.Log(string.Format("DistL: {0}, DistR: {1}", distL, distR));
+                    if (distL < minDistance || distR < minDistance)
+                    {
+                        minDistance = Mathf.Min(distL, distR);
+                        delta = nearPlatformRadius - minDistance;
+                    }
+                }
+            }
+
+            audioNearPlatform.volume = volume + delta / 6f;
+            audioNearPlatform.pitch = 1f - delta / 15f;
+        }
+        else
+        {
+            audioNearPlatform.volume = volume;
+        }
     }
 
     public void SetHealth(int h)
@@ -90,11 +148,14 @@ public class PlayerController : MonoBehaviour
 
         if (healthEvent != null && !isDead)
         {
+            snd_hit.pitch = 1.0f + health / 100.0f;
+            snd_hit.Play();
             healthEvent(health);
         }
 
         if (health <= 0f)
         {
+            snd_dead.Play();
             PlayerDead();
         }
     }
@@ -123,6 +184,7 @@ public class PlayerController : MonoBehaviour
     public void PlayerDead()
     {
         isDead = true;
+        //audioNearPlatform.volume = volume;
         gameObject.SetActive(false);
 
         if (deathEvent != null)
@@ -165,5 +227,24 @@ public class PlayerController : MonoBehaviour
         Color.RGBToHSV(bg_col, out H, out S, out V);
         H = h;
         Camera.main.GetComponent<Camera>().backgroundColor = Color.HSVToRGB(H, S, V);
+    }
+
+    public bool IsDoubleTap()
+    {
+        bool result = false;
+
+        if (Input.touchCount <= 0)
+        {
+            return false;
+        }
+        foreach (var touch in Input.touches)
+        {
+            if (touch.tapCount == 2)
+            {
+                result = true;
+            }
+        }
+
+        return result;
     }
 }

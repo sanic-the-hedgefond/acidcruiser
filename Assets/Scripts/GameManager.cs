@@ -25,6 +25,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public Background background = null;
 
+    public int hitsTilDeath = 5;
+
+    public AudioSource audioGameStart;
+    public AudioSource audioPlatformOutOfFrame;
+    public AudioSource audioCoin;
+
     //private GameState gameState;
     private string playerName;
     private float sensitivity;
@@ -66,14 +72,15 @@ public class GameManager : MonoBehaviour
             startGameEvent();
         }
         //gameState = GameState.Playing;
-        StartCoroutine(SetBGColor(color_BGgame, 50));
-        StartCoroutine(background.SetGridColor(new Color(191/255f, 82/255f, 167/255f, 1f) * 2f));
+        audioGameStart.Play();
+        //StartCoroutine(SetBGColor(color_BGgame, 50));
+        //StartCoroutine(background.SetGridColor(new Color(191/255f, 82/255f, 167/255f, 1f) * 2f));
     }
 
     void OnDeath()
     {
-        StartCoroutine(SetBGColor(color_BGmenu, 50));
-        StartCoroutine(background.SetGridColor(new Color(255 / 255f, 255 / 255f, 255 / 255f, 1f) * 1.5f));
+        //StartCoroutine(SetBGColor(color_BGmenu, 50));
+        //StartCoroutine(background.SetGridColor(new Color(255 / 255f, 255 / 255f, 255 / 255f, 1f) * 1.5f));
         highscoreManager.NewHighscore(playerName, playerController.Score, DateTime.Now);
         highscoreManager.SaveHighscores();
         //gameState = GameState.Dead;
@@ -134,5 +141,15 @@ public class GameManager : MonoBehaviour
     public float GetSensitivity()
     {
         return sensitivity;
+    }
+
+    public void Pause()
+    {
+        Time.timeScale = 0;
+    }
+
+    public void Unpause()
+    {
+        Time.timeScale = 1;
     }
 }

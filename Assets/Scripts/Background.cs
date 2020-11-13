@@ -28,6 +28,7 @@ public class Background : MonoBehaviour
         mat_BG.SetVector("Vector2_71705CE4", speed);
     }
 
+    /*
     public IEnumerator SetGridColor(Color color)
     {
         int duration = 60;
@@ -48,4 +49,5 @@ public class Background : MonoBehaviour
 
         Debug.Log(mat_BG.GetColor("Color_CE87F6DE"));
     }
+    */
 }

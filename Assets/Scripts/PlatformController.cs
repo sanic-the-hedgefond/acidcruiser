@@ -15,16 +15,24 @@ public class PlatformController : MonoBehaviour
     public bool isDestroyed;
     public bool isLast;
 
+    public string message = "";
+
     private GameManager gameManager;
     private int score;
+
+    private bool soundPlayed;
+    private float longestSide;
 
     // Start is called before the first frame update
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         isDestroyed = false;
+        soundPlayed = false;
 
-        score = 20 * ((int)transform.localScale.x + 1) * ((int)transform.localScale.y + 1);
+        score = 20 * ((int)transform.localScale.x + 1) * ((int)transform.localScale.y + 1) * ((int)transform.localScale.z + 1);
+
+        longestSide = Mathf.Max(transform.localScale.x, transform.localScale.y, transform.localScale.z);
     }
 
     // Update is called once per frame
@@ -36,6 +44,11 @@ public class PlatformController : MonoBehaviour
         pos.y -= y_speed;
         transform.position = pos;
         transform.Rotate(new Vector3(x_rot, y_rot, z_rot));
+
+        if (pos.y < -(2.5f + longestSide) && !soundPlayed)
+        {
+            OutOfFrame();
+        }
 
         // Destroy if platform is out of frame
         if (pos.y < -6f)
@@ -51,7 +64,7 @@ public class PlatformController : MonoBehaviour
             if(!isDestroyed)
             {
                 StartCoroutine(DeathAnimation());
-                FindObjectOfType<PlayerController>().DecreaseHealth(50);
+                FindObjectOfType<PlayerController>().DecreaseHealth(100 / gameManager.hitsTilDeath);
 
                 GameObject gameUI = GameObject.Find("GameUI");
                 if (gameUI != null)
@@ -69,21 +82,36 @@ public class PlatformController : MonoBehaviour
         }
     }
 
-    public void Kill()
+    public void OutOfFrame()
     {
-        if (isLast)
+        GameObject gameUI = GameObject.Find("GameUI");
+
+        if (!isLast)
         {
-            gameManager.NextStage();
-        }
-        else
-        {
-            GameObject gameUI = GameObject.Find("GameUI");
+            gameManager.audioPlatformOutOfFrame.Play();
+            soundPlayed = true;
+
             if (gameUI != null)
             {
-                gameUI.GetComponent<GameUI>().DisplayText("+" + score, 200f, 20, new Vector2(0f, 250f), new Color(0f, 0f, 0f));
+                gameUI.GetComponent<GameUI>().DisplayText("+" + score, 200f, 20, new Vector2(0f, 150f), new Color(255f, 255f, 255f));
             }
 
             FindObjectOfType<PlayerController>().IncreaseScore(score);
+        }
+    }
+
+    public void Kill()
+    {
+        GameObject gameUI = GameObject.Find("GameUI");
+
+        if (message != "" && gameUI != null)
+        {
+            gameUI.GetComponent<GameUI>().DisplayText(message, 200f, 120, new Vector2(0f, -100f), new Color(255f, 255f, 255f));
+        }
+
+        if (isLast)
+        {
+            gameManager.NextStage();
         }
         Destroy(gameObject);
     }

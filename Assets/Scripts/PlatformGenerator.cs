@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlatformGenerator : MonoBehaviour
 {
-    public GameObject platform;
-    public GameObject[] stages;
+    //public GameObject platform;
+    private GameObject[] stages;
     private int current_stage;
 
     private List<GameObject> level;
@@ -17,9 +17,9 @@ public class PlatformGenerator : MonoBehaviour
 
         level = new List<GameObject>();
 
-        current_stage = 0;
-
         gameObject.SetActive(false);
+
+        stages = Resources.LoadAll<GameObject>("Levels");
     }
 
     void Deactivate()
@@ -36,6 +36,12 @@ public class PlatformGenerator : MonoBehaviour
     void Activate()
     {
         gameObject.SetActive(true);
+
+        foreach (GameObject stage in level)
+        {
+            Destroy(stage);
+        }
+        level.Clear();
         current_stage = 0;
         GenerateStage(current_stage);
     }
