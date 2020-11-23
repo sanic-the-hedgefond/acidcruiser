@@ -11,16 +11,21 @@ public class MenuUI : MonoBehaviour
     public TextMeshProUGUI playerNameText;
     public Slider sliderSensitivity;
 
+    private CanvasGroup canvasGroup;
+
     // Start is called before the first frame update
     void Start()
     {
         gameObject.SetActive(true);
         gameManager = FindObjectOfType<GameManager>();
+        canvasGroup = GetComponent<CanvasGroup>();
+        StartCoroutine(FadeIn(2));
     }
 
     public void SetPlayerName()
     {
         playerNameText.text = gameManager.GetPlayerName();
+        playerNameText.SetText(gameManager.GetPlayerName());
     }
 
     public void ChangePlayerName()
@@ -39,5 +44,19 @@ public class MenuUI : MonoBehaviour
     public void SetSlider()
     {
         sliderSensitivity.value = gameManager.GetSensitivity();
+    }
+
+    IEnumerator FadeIn(float fadeTime)
+    {
+        float elapsedTime = 0f;
+
+        while (canvasGroup.alpha < 1)
+        {
+            elapsedTime += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Clamp01(elapsedTime / fadeTime);
+            yield return null;
+        }
+
+        yield return null;
     }
 }

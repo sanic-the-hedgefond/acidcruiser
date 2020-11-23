@@ -8,6 +8,8 @@ public class CoinController : MonoBehaviour
     public float x_speed;
     public float y_speed;
 
+    public float y_acc;
+
     public int score;
 
     public bool isDestroyed;
@@ -45,6 +47,11 @@ public class CoinController : MonoBehaviour
         if (pos.y < -6f)
         {
             Kill();
+        }
+
+        else if (pos.y < 8f)
+        {
+            y_speed += y_acc;
         }
     }
 

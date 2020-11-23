@@ -20,8 +20,8 @@ public class PlayerController : MonoBehaviour
 
     public GameObject go_cube_L, go_cube_R;
 
-    public AudioSource snd_hit;
-    public AudioSource snd_dead;
+    public AudioSource audioHit;
+    public AudioSource audioDead;
     public AudioSource audioNearPlatform;
 
     private Vector2 position_start;
@@ -29,8 +29,12 @@ public class PlayerController : MonoBehaviour
     private float rotation_interp = 0f;
     private float const_inner_rotation = 0f;
 
-    private float nearPlatformRadius = 2.2f;
-    private float volume = 0.1f;
+    public float nearPlatformRadius = 1.5f;
+    public float gravityPlatform = -0.5f;
+    public float volumePlatform = 0.05f;
+
+    public float minDistanceCoin = 1.0f;
+    public float gravityCoin = 0.15f;
 
     private bool isDead;
     private const int start_health = 100;
@@ -43,14 +47,12 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         FindObjectOfType<GameManager>().startGameEvent += Reset;
+        FindObjectOfType<GameManager>().pauseGameEvent += Mute;
         isDead = true;
         score = 0;
 
         go_cube_L.SetActive(false);
         go_cube_R.SetActive(false);
-
-        audioNearPlatform.volume = volume;
-        audioNearPlatform.Play();
     }
 
     // Update is called once per frame
@@ -99,41 +101,80 @@ public class PlayerController : MonoBehaviour
         //SetBGHue(Mathf.Abs(rotation_interp) % 1000 * 0.001f);
 
         // Check for platforms in radius and play sound
-        Collider[] nearPlatforms = Physics.OverlapSphere(transform.position, 15);
+        Collider[] nearObjects = Physics.OverlapSphere(transform.position, 10);
 
         //Debug.Log(string.Format("nearPlatforms: {0}", nearPlatforms.Length));
 
-        if (nearPlatforms.Length != 0)
+        if (nearObjects.Length != 0)
         {
             float delta = 0f;
-            float minDistance = nearPlatformRadius;
+            float minDistancePlatform = nearPlatformRadius;
 
-            foreach (var platform in nearPlatforms)
+            foreach (var nearObject in nearObjects)
             {
-                if (platform.gameObject.tag == "Platform")
+                if (nearObject.gameObject.tag == "Platform")
                 {
                     //vol = 1f;
-                    Vector3 closestL = platform.ClosestPointOnBounds(go_cube_L.transform.position + new Vector3(0.25f, 0f, 2.2f));
-                    Vector3 closestR = platform.ClosestPointOnBounds(go_cube_R.transform.position + new Vector3(-0.25f, 0f, 2.2f));
+                    Vector3 closestL = nearObject.ClosestPointOnBounds(go_cube_L.transform.position + new Vector3(0.25f, 0f, 2.2f));
+                    Vector3 closestR = nearObject.ClosestPointOnBounds(go_cube_R.transform.position + new Vector3(-0.25f, 0f, 2.2f));
 
                     float distL = Vector3.Distance(go_cube_L.transform.position, closestL);
                     float distR = Vector3.Distance(go_cube_R.transform.position, closestR);
 
                     //Debug.Log(string.Format("DistL: {0}, DistR: {1}", distL, distR));
-                    if (distL < minDistance || distR < minDistance)
+                    /*if (distL < minDistancePlatform || distR < minDistancePlatform)
                     {
-                        minDistance = Mathf.Min(distL, distR);
-                        delta = nearPlatformRadius - minDistance;
+                        minDistancePlatform = Mathf.Min(distL, distR);
+                        delta = nearPlatformRadius - minDistancePlatform;
+                    }*/
+
+                    if (distL < minDistancePlatform)
+                    {
+                        delta = nearPlatformRadius - distL;
+
+                        Vector3 direction = (go_cube_L.transform.position - nearObject.gameObject.transform.position).normalized;
+                        //Debug.Log(direction);
+                        nearObject.GetComponent<Rigidbody>().AddForce(direction * gravityPlatform);
+                    }
+                    else if (distR < minDistancePlatform)
+                    {
+                        delta = nearPlatformRadius - distR;
+
+                        Vector3 direction = (go_cube_R.transform.position - nearObject.gameObject.transform.position).normalized;
+                        //Debug.Log(direction);
+                        nearObject.GetComponent<Rigidbody>().AddForce(direction * gravityPlatform);
                     }
                 }
-            }
 
-            audioNearPlatform.volume = volume + delta / 6f;
+                if (nearObject.gameObject.tag == "Coin")
+                {
+                    Vector3 closestL = nearObject.ClosestPointOnBounds(go_cube_L.transform.position + new Vector3(0.25f, 0f, 2.2f));
+                    Vector3 closestR = nearObject.ClosestPointOnBounds(go_cube_R.transform.position + new Vector3(-0.25f, 0f, 2.2f));
+
+                    float distL = Vector3.Distance(go_cube_L.transform.position, closestL);
+                    float distR = Vector3.Distance(go_cube_R.transform.position, closestR);
+
+                    if (distL < minDistanceCoin)
+                    {
+                        float smoothFactor = 1 + minDistanceCoin - distL;
+                        Vector3 newPos = Vector3.Lerp(nearObject.gameObject.transform.position, go_cube_L.transform.position, gravityCoin * smoothFactor);
+                        nearObject.gameObject.transform.position = newPos;
+                    }
+                    else if (distR < minDistanceCoin)
+                    {
+                        float smoothFactor = 1 + minDistanceCoin - distR;
+                        Vector3 newPos = Vector3.Lerp(nearObject.gameObject.transform.position, go_cube_R.transform.position, gravityCoin * smoothFactor);
+                        nearObject.gameObject.transform.position = newPos;
+                    }
+                }
+
+            }
+            audioNearPlatform.volume = volumePlatform + delta / 10f;
             audioNearPlatform.pitch = 1f - delta / 15f;
         }
         else
         {
-            audioNearPlatform.volume = volume;
+            audioNearPlatform.volume = volumePlatform;
         }
     }
 
@@ -148,14 +189,14 @@ public class PlayerController : MonoBehaviour
 
         if (healthEvent != null && !isDead)
         {
-            snd_hit.pitch = 1.0f + health / 100.0f;
-            snd_hit.Play();
+            audioHit.pitch = 1.0f + health / 100.0f;
+            audioHit.Play();
             healthEvent(health);
         }
 
         if (health <= 0f)
         {
-            snd_dead.Play();
+            audioDead.Play();
             PlayerDead();
         }
     }
@@ -186,6 +227,7 @@ public class PlayerController : MonoBehaviour
         isDead = true;
         //audioNearPlatform.volume = volume;
         gameObject.SetActive(false);
+        Mute();
 
         if (deathEvent != null)
         {
@@ -203,6 +245,9 @@ public class PlayerController : MonoBehaviour
         health = start_health;
         transform.rotation = Quaternion.identity;
         sensitivity = FindObjectOfType<GameManager>().GetSensitivity();
+
+        audioNearPlatform.volume = volumePlatform;
+        audioNearPlatform.Play();
 
         if (restartEvent != null)
         {
@@ -246,5 +291,10 @@ public class PlayerController : MonoBehaviour
         }
 
         return result;
+    }
+
+    public void Mute()
+    {
+        audioNearPlatform.volume = 0;
     }
 }

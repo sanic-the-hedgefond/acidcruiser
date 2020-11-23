@@ -8,6 +8,8 @@ public class PlatformController : MonoBehaviour
     public float x_speed;
     public float y_speed;
 
+    public float y_acc;
+
     public float z_rot;
     public float y_rot;
     public float x_rot;
@@ -40,10 +42,8 @@ public class PlatformController : MonoBehaviour
     {
         // Move platform
         Vector3 pos = transform.position;
-        pos.x += x_speed;
+        
         pos.y -= y_speed;
-        transform.position = pos;
-        transform.Rotate(new Vector3(x_rot, y_rot, z_rot));
 
         if (pos.y < -(2.5f + longestSide) && !soundPlayed)
         {
@@ -55,6 +55,15 @@ public class PlatformController : MonoBehaviour
         {
             Kill();
         }
+
+        else if (pos.y < 8f)
+        {
+            y_speed += y_acc;
+            pos.x += x_speed;
+        }
+
+        transform.position = pos;
+        transform.Rotate(new Vector3(x_rot, y_rot, z_rot));
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -86,7 +95,7 @@ public class PlatformController : MonoBehaviour
     {
         GameObject gameUI = GameObject.Find("GameUI");
 
-        if (!isLast)
+        if (!isLast && message == "")
         {
             gameManager.audioPlatformOutOfFrame.Play();
             soundPlayed = true;

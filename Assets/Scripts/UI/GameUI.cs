@@ -13,6 +13,7 @@ public class GameUI : MonoBehaviour
     void Start()
     {
         FindObjectOfType<PlayerController>().deathEvent += OnDeath;
+        FindObjectOfType<PlayerController>().pauseEvent += OnDeath;
         gameObject.SetActive(false);
     }
 

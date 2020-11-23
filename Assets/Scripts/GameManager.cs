@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     }
 
     public Action startGameEvent;
+    public Action pauseGameEvent;
     public HighscoreManager highscoreManager;
 
     public Color color_BGmenu;
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
     public AudioSource audioGameStart;
     public AudioSource audioPlatformOutOfFrame;
     public AudioSource audioCoin;
+    public AudioSource audioMusic;
 
     //private GameState gameState;
     private string playerName;
@@ -73,6 +75,7 @@ public class GameManager : MonoBehaviour
         }
         //gameState = GameState.Playing;
         audioGameStart.Play();
+        Unpause();
         //StartCoroutine(SetBGColor(color_BGgame, 50));
         //StartCoroutine(background.SetGridColor(new Color(191/255f, 82/255f, 167/255f, 1f) * 2f));
     }
@@ -146,6 +149,11 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         Time.timeScale = 0;
+
+        if (pauseGameEvent != null)
+        {
+            pauseGameEvent();
+        }
     }
 
     public void Unpause()
