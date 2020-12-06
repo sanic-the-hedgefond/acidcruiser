@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (IsDoubleTap())
+        if (IsDoubleTap() && !isDead)
         {
             if (pauseEvent != null)
             {

@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 
     public Action startGameEvent;
     public Action pauseGameEvent;
+
     public HighscoreManager highscoreManager;
 
     public Color color_BGmenu;
@@ -31,7 +32,8 @@ public class GameManager : MonoBehaviour
     public AudioSource audioGameStart;
     public AudioSource audioPlatformOutOfFrame;
     public AudioSource audioCoin;
-    public AudioSource audioMusic;
+    public AudioSource audioMusicLoop;
+    public AudioSource audioMusicIntro;
 
     //private GameState gameState;
     private string playerName;
@@ -58,6 +60,15 @@ public class GameManager : MonoBehaviour
         else
         {
             sensitivity = 1f;
+        }
+
+        if (PlayerPrefs.HasKey("musicVolume"))
+        {
+            audioMusicLoop.volume = PlayerPrefs.GetFloat("musicVolume");
+        }
+        else
+        {
+            audioMusicLoop.volume = 0.5f;
         }
 
         highscoreManager = new HighscoreManager();
@@ -159,5 +170,22 @@ public class GameManager : MonoBehaviour
     public void Unpause()
     {
         Time.timeScale = 1;
+    }
+
+    public void SetMusicVolume(float v)
+    {
+        audioMusicIntro.volume = v;
+        audioMusicLoop.volume = v;
+    }
+
+    public float GetMusicVolume()
+    {
+        return audioMusicLoop.volume;
+    }
+
+    public void PlayMusic()
+    {
+        audioMusicIntro.Play();
+        audioMusicLoop.PlayDelayed(audioMusicIntro.clip.length);
     }
 }

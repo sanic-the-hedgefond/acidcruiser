@@ -7,12 +7,6 @@ public class PauseUI : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
 
-    void SetScore()
-    {
-        int score = FindObjectOfType<GameManager>().GetScore();
-        scoreText.text = "score\n" + score;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -30,5 +24,11 @@ public class PauseUI : MonoBehaviour
     {
         gameObject.SetActive(true);
         SetScore();
+    }
+
+    void SetScore()
+    {
+        int score = FindObjectOfType<GameManager>().GetScore();
+        scoreText.text = "score\n" + score;
     }
 }

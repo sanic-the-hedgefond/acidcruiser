@@ -10,11 +10,11 @@ public class GameUI : MonoBehaviour
     List<GameObject> texts = new List<GameObject>();
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        FindObjectOfType<PlayerController>().deathEvent += OnDeath;
-        FindObjectOfType<PlayerController>().pauseEvent += OnDeath;
-        gameObject.SetActive(false);
+        FindObjectOfType<PlayerController>().deathEvent += OnHide;
+        FindObjectOfType<PlayerController>().pauseEvent += OnHide;
+        //gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -23,7 +23,7 @@ public class GameUI : MonoBehaviour
         
     }
 
-    void OnDeath()
+    void OnHide()
     {
         foreach (GameObject text in texts)
         {

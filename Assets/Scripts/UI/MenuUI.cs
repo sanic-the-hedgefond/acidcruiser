@@ -4,23 +4,46 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MenuUI : MonoBehaviour
+public class MenuUI : FadeIn
 {
     private GameManager gameManager;
 
     public TextMeshProUGUI playerNameText;
+    public TextMeshProUGUI playerNamePlaceholder;
     public Slider sliderSensitivity;
+    public Slider sliderMusicVolume;
 
-    private CanvasGroup canvasGroup;
+    //public float fadeTime = 1.5f;
+
+    //private CanvasGroup canvasGroup;
 
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
-        gameObject.SetActive(true);
-        gameManager = FindObjectOfType<GameManager>();
-        canvasGroup = GetComponent<CanvasGroup>();
-        StartCoroutine(FadeIn(2));
+        //base.Start();
+        gameObject.SetActive(false);
     }
+
+    public new void OnEnable()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+        //canvasGroup = GetComponent<CanvasGroup>();
+
+        playerNamePlaceholder.text = gameManager.GetPlayerName();
+        playerNamePlaceholder.SetText(gameManager.GetPlayerName());
+
+        base.OnEnable();
+        //StartCoroutine(DoFadeIn(fadeTime, canvasGroup));
+    }
+
+    /*
+    public new void OnDisable()
+    {
+        base.OnDisable();
+
+        //canvasGroup.alpha = 0;
+    }
+    */
 
     public void SetPlayerName()
     {
@@ -30,9 +53,9 @@ public class MenuUI : MonoBehaviour
 
     public void ChangePlayerName()
     {
-        if (playerNameText.text != "")
+        if (playerNamePlaceholder.text != "")
         {
-            gameManager.SetPlayerName(playerNameText.text);
+            gameManager.SetPlayerName(playerNamePlaceholder.text);
         }
     }
 
@@ -41,22 +64,18 @@ public class MenuUI : MonoBehaviour
         gameManager.SetSensitivity(sliderSensitivity.value);
     }
 
-    public void SetSlider()
+    public void SetSliderSensitivity()
     {
         sliderSensitivity.value = gameManager.GetSensitivity();
     }
 
-    IEnumerator FadeIn(float fadeTime)
+    public void ChangeMusicVolume()
     {
-        float elapsedTime = 0f;
+        gameManager.SetMusicVolume(sliderMusicVolume.value);
+    }
 
-        while (canvasGroup.alpha < 1)
-        {
-            elapsedTime += Time.deltaTime;
-            canvasGroup.alpha = Mathf.Clamp01(elapsedTime / fadeTime);
-            yield return null;
-        }
-
-        yield return null;
+    public void SetSliderMusicVolume()
+    {
+        sliderMusicVolume.value = gameManager.GetMusicVolume();
     }
 }

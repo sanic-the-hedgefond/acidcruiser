@@ -15,7 +15,7 @@ public class RandomMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Vector3 pos = transform.position;
         pos.y += Mathf.Sin(Time.time * y_time + y_phase) * y_move;

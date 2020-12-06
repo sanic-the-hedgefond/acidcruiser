@@ -9,7 +9,10 @@ public class TextScore : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        FindObjectOfType<PlayerController>().scoreEvent += UpdateScore;
+        if (FindObjectOfType<PlayerController>())
+        {
+            FindObjectOfType<PlayerController>().scoreEvent += UpdateScore;
+        }
     }
 
     // Update is called once per frame

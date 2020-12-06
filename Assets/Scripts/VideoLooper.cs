@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class VideoLooper : MonoBehaviour
 {
-    UnityEngine.Video.VideoPlayer videoPlayer;
+    private UnityEngine.Video.VideoPlayer videoPlayer;
 
     // Start is called before the first frame update
     void Start()

@@ -7,12 +7,6 @@ public class DeadUI : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
 
-    void SetScore()
-    {
-        int score = FindObjectOfType<GameManager>().GetScore();
-        scoreText.text = "final score\n" + score;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -30,5 +24,11 @@ public class DeadUI : MonoBehaviour
     {
         gameObject.SetActive(true);
         SetScore();
+    }
+
+    void SetScore()
+    {
+        int score = FindObjectOfType<GameManager>().GetScore();
+        scoreText.text = "final score\n" + score;
     }
 }
