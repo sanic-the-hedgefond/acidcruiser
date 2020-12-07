@@ -111,4 +111,9 @@ public class CoinController : MonoBehaviour
         }
         Destroy(gameObject);
     }
+
+    public void SetSpeed(float y)
+    {
+        y_speed = y;
+    }
 }

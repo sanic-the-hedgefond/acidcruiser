@@ -2039,6 +2039,78 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &378357237
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 378357239}
+  - component: {fileID: 378357238}
+  m_Layer: 0
+  m_Name: LevelGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &378357238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378357237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d42d9400fe1073458817d265946bc69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  platformPrefab: {fileID: 2169559913993485282, guid: 6f9fc062daf95464aa3a6bf525b3ef2c,
+    type: 3}
+  coinPrefab: {fileID: 8382669870326156391, guid: 90080d072e035234eb14cf9824e305c0,
+    type: 3}
+  levelStartHeight: 8
+  levelEndHeight: 50
+  ratioVerticalPlatforms: 0.4
+  ratioCoins: 0.1
+  minCoinsInRow: 2
+  maxCoinsInRow: 6
+  minCoinX: -2
+  maxCoinX: 2
+  minPlatformDist: 5
+  minPlatformWidth: 1
+  maxPlatformWidth: 4
+  minPlatformHeight: 0.4
+  maxPlatformHeight: 0.6
+  minPlatformX: -3
+  maxPlatformX: 3
+  minPlatformSpeedX: -0.005
+  maxPlatformSpeedX: 0.006
+  platformSpeedY: 0.05
+  platformAccY: 0
+  minPlatformRotationX: -0.35
+  maxPlatformRotationX: 1
+  minPlatformRotationY: 0.01
+  maxPlatformRotationY: -0.05
+  minPlatformRotationZ: -0.2
+  maxPlatformRotationZ: 0.5
+--- !u!4 &378357239
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378357237}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 341.3876, y: 544.63153, z: -7.0330505}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &401498807
 GameObject:
   m_ObjectHideFlags: 0
@@ -2085,7 +2157,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &420290021
 GameObject:
@@ -3155,7 +3227,7 @@ Transform:
   - {fileID: 995387885}
   - {fileID: 68108753}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &729121016
 GameObject:
@@ -3273,7 +3345,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &764521634
 GameObject:
@@ -3643,7 +3715,7 @@ Transform:
   m_LocalScale: {x: 20, y: 20, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &843480127
 MonoBehaviour:
@@ -4331,7 +4403,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1055410037
 GameObject:
@@ -4837,6 +4909,18 @@ MonoBehaviour:
         - m_Target: {fileID: 2106184929}
           m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
           m_MethodName: Unpause
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 378357238}
+          m_TargetAssemblyTypeName: LevelGenerator, Assembly-CSharp
+          m_MethodName: Deactivate
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -5925,8 +6009,8 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
-  orthographic: 1
+  field of view: 75
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -5951,11 +6035,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271425662}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1271425666
 MonoBehaviour:
@@ -6152,7 +6236,7 @@ Transform:
   - {fileID: 1764007461}
   - {fileID: 1763702702}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1287046114
 MonoBehaviour:
@@ -10275,7 +10359,7 @@ Transform:
   - {fileID: 2008909903}
   - {fileID: 1519204089}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2078642109
 GameObject:
@@ -10828,7 +10912,7 @@ PrefabInstance:
     - target: {fileID: 4546280380516966900, guid: 053eabe9561ebc045b561edd39267062,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4546280380516966900, guid: 053eabe9561ebc045b561edd39267062,
         type: 3}

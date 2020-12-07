@@ -12,8 +12,8 @@ public class PlatformGenerator : MonoBehaviour
 
     void Start()
     {
-        FindObjectOfType<GameManager>().startGameEvent += Activate;
-        FindObjectOfType<PlayerController>().deathEvent += Deactivate;
+        //FindObjectOfType<GameManager>().startGameEvent += Activate;
+        //FindObjectOfType<PlayerController>().deathEvent += Deactivate;
 
         level = new List<GameObject>();
 

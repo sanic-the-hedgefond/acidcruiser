@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class PlatformController : MonoBehaviour
 {
-    public float x_speed;
-    public float y_speed;
+    public float speedX;
+    public float speedY;
 
-    public float y_acc;
+    public float accY;
 
-    public float z_rot;
-    public float y_rot;
-    public float x_rot;
+    public float rotZ;
+    public float rotY;
+    public float rotX;
 
     public bool isDestroyed;
     public bool isLast;
@@ -32,9 +32,7 @@ public class PlatformController : MonoBehaviour
         isDestroyed = false;
         soundPlayed = false;
 
-        score = 20 * ((int)transform.localScale.x + 1) * ((int)transform.localScale.y + 1) * ((int)transform.localScale.z + 1);
-
-        longestSide = Mathf.Max(transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        SetScore();
     }
 
     // Update is called once per frame
@@ -43,7 +41,7 @@ public class PlatformController : MonoBehaviour
         // Move platform
         Vector3 pos = transform.position;
         
-        pos.y -= y_speed;
+        pos.y -= speedY;
 
         if (pos.y < -(2.5f + longestSide) && !soundPlayed)
         {
@@ -58,12 +56,12 @@ public class PlatformController : MonoBehaviour
 
         else if (pos.y < 8f)
         {
-            y_speed += y_acc;
-            pos.x += x_speed;
+            speedY += accY;
+            pos.x += speedX;
+            transform.Rotate(new Vector3(rotX, rotY, rotZ));
         }
 
         transform.position = pos;
-        transform.Rotate(new Vector3(x_rot, y_rot, z_rot));
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -80,7 +78,7 @@ public class PlatformController : MonoBehaviour
                 {
                     gameUI.GetComponent<GameUI>().DisplayText("-" + score, 200f, 20, new Vector2(0f, 250f), new Color(255f/255f, 68f/255f, 195f/255f));
                 }
-
+                
                 if(FindObjectOfType<PlayerController>() != null)
                 {
                     FindObjectOfType<PlayerController>().DecreaseScore(score);
@@ -95,7 +93,7 @@ public class PlatformController : MonoBehaviour
     {
         GameObject gameUI = GameObject.Find("GameUI");
 
-        if (!isLast && message == "")
+        if (gameManager && !isLast && message == "")
         {
             gameManager.audioPlatformOutOfFrame.Play();
             soundPlayed = true;
@@ -112,6 +110,7 @@ public class PlatformController : MonoBehaviour
     public void Kill()
     {
         GameObject gameUI = GameObject.Find("GameUI");
+        LevelGenerator levelGenerator = FindObjectOfType<LevelGenerator>();
 
         if (message != "" && gameUI != null)
         {
@@ -121,6 +120,12 @@ public class PlatformController : MonoBehaviour
         if (isLast)
         {
             gameManager.NextStage();
+        }
+
+        if (levelGenerator)
+        {
+            Debug.Log("Remove Platform");
+            levelGenerator.removePlatform(gameObject);
         }
         Destroy(gameObject);
     }
@@ -149,6 +154,30 @@ public class PlatformController : MonoBehaviour
                                                 Mathf.SmoothStep(scale.z, 0f, i/(float)frames_part2));
             yield return new WaitForFixedUpdate();
         }
-        Destroy(gameObject);
+        Kill();
+    }
+
+    public void SetScore()
+    {
+        score = 20 * ((int)transform.localScale.x + 1) * ((int)transform.localScale.y + 1) * ((int)transform.localScale.z + 1);
+        longestSide = Mathf.Max(transform.localScale.x, transform.localScale.y, transform.localScale.z);
+    }
+
+    public void SetSpeed(float x, float y)
+    {
+        speedX = x;
+        speedY = y;
+    }
+
+    public void SetAcceleration(float y)
+    {
+        accY = y;
+    }
+
+    public void SetRotation(float x, float y, float z)
+    {
+        rotX = x;
+        rotY = y;
+        rotZ = z;
     }
 }

@@ -46,13 +46,18 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        FindObjectOfType<GameManager>().startGameEvent += Reset;
-        FindObjectOfType<GameManager>().pauseGameEvent += Mute;
-        isDead = true;
-        score = 0;
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        if (gameManager)
+        {
+            gameManager.startGameEvent += Reset;
+            gameManager.pauseGameEvent += Mute;
 
-        go_cube_L.SetActive(false);
-        go_cube_R.SetActive(false);
+            isDead = true;
+            score = 0;
+
+            go_cube_L.SetActive(false);
+            go_cube_R.SetActive(false);
+        }
     }
 
     // Update is called once per frame
